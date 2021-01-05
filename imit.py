@@ -5,12 +5,12 @@ from demand import Demand
 from device import Device
 
 
-def imitation(par=None, time=999999):
-    if par is None:
-        par = {"la": 0.5, "mu": 1}
+def imitation(flows=None, time=999999):
+    if flows is None:
+        flows = {"la": 0.5, "mu": 1}
     times = {
         "current": 0,
-        "arrival": exp(par["la"]),
+        "arrival": exp(flows["la"]),
         "service": float("inf"),
         "leaving": float("inf"),
     }
@@ -21,7 +21,7 @@ def imitation(par=None, time=999999):
     queue = Queue()
     device = Device()
     system = {
-        "par": par,
+        "flows": flows,
         "queue": queue,
         "device": device,
     }
@@ -51,12 +51,12 @@ def arrival_demand(times, system):
     if system["queue"].empty() and not system["device"].serves:
         times["service"] = times["current"]
     system["queue"].put(demand)
-    times["arrival"] += exp(system["par"]["la"])
+    times["arrival"] += exp(system["flows"]["la"])
 
 
 def service_demand(times, system):
     print("II. Start service demand", times["current"], end="\t###\t")
-    service_time = exp(system["par"]["mu"])
+    service_time = exp(system["flows"]["mu"])
     times["leaving"] = times["current"] + service_time
     system["device"].to_occupy(system["queue"].get())
     print("demand ID:", system["device"].demand.id)
@@ -80,5 +80,5 @@ def leaving_demand(times, system, stat):
 if __name__ == '__main__':
     la = 1
     mu = 2
-    init = {"la": la, "mu": mu}
+    flow = {"la": la, "mu": mu}
     imitation()
