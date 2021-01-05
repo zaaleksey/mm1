@@ -17,6 +17,8 @@ Suppose the system is in state n. Then, the balance equation reads
 
 (λ+μ)Pn = λPn−1 + μPn+1
 
+![Image alt](https://github.com/AlexZavr/mm1/raw/master/img/2.png)
+
 Essentially,
 (λ+μ)Pn:  rate of an arrival or departure to Pn
 λPn−1:    rate of an arrival to Pn−1
