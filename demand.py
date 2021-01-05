@@ -1,9 +1,9 @@
 class Demand:
-    count = 0
+    __COUNT = 0
 
     def __init__(self, arrival_time):
-        Demand.count += 1
-        self.id = Demand.count
+        Demand.__COUNT += 1
+        self.id = Demand.__COUNT
         self.arrival_time = arrival_time
         self.service_start_time = None
         self.leaving_time = None
