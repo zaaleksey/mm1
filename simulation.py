@@ -1,4 +1,4 @@
-from random import expovariate as exp
+from random import expovariate
 
 from clock import Clock
 from configuration import Configuration
@@ -6,7 +6,7 @@ from demand import Demand
 from statistics import Statistics
 
 
-def run(mu, lambd, simulation_time) -> None:
+def run(mu: float, lambd: float, simulation_time: float) -> None:
     times = Clock()
     system = Configuration(mu=mu, lambd=lambd)
     statistics = Statistics()
@@ -14,7 +14,7 @@ def run(mu, lambd, simulation_time) -> None:
     loop(simulation_time, times, system, statistics)
 
 
-def loop(simulation_time: int, times: Clock, system: Configuration, statistics: Statistics) -> None:
+def loop(simulation_time: float, times: Clock, system: Configuration, statistics: Statistics) -> None:
     times.update_arrival_time(system.lambd)
     while times.current <= simulation_time:
         times.current = get_time_of_nearest_event(times)
@@ -42,8 +42,7 @@ def arrival_demand(times: Clock, system: Configuration) -> None:
 
 def service_demand(times: Clock, system: Configuration) -> None:
     print("II. Start service demand", times.current, end="\t###\t")
-    service_time = exp(system.mu)
-    times.leaving = times.current + service_time
+    times.leaving = times.current + expovariate(system.mu)
     system.device.to_occupy(system.queue.get())
     print("demand ID:", system.device.demand.id)
     system.device.demand.service_start_time = times.current
@@ -56,8 +55,8 @@ def leaving_demand(times: Clock, system: Configuration, statistics: Statistics) 
     print("demand ID:", demand.id)
     system.device.to_free()
     demand.set_leaving_time(times.current)
-    statistics.average_time += demand.leaving_time - demand.arrival_time
-    statistics.leaving_count += 1
+    statistics.update(demand)
+
     if not system.queue.empty():
         times.service_start = times.current
     times.leaving = float('inf')

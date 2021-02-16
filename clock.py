@@ -9,5 +9,5 @@ class Clock:
     service_start: float = float('inf')
     leaving: float = float('inf')
 
-    def update_arrival_time(self, rate) -> None:
+    def update_arrival_time(self, rate: float) -> None:
         self.arrival += expovariate(rate)
