@@ -14,7 +14,10 @@ def run(mu: float, lambd: float, simulation_time: float) -> None:
     loop(simulation_time, times, system, statistics)
 
 
-def loop(simulation_time: float, times: Clock, system: Configuration, statistics: Statistics) -> None:
+def loop(simulation_time: float,
+         times: Clock,
+         system: Configuration,
+         statistics: Statistics) -> None:
     times.update_arrival_time(system.lambd)
     while times.current <= simulation_time:
         times.current = get_time_of_nearest_event(times)
@@ -30,7 +33,8 @@ def loop(simulation_time: float, times: Clock, system: Configuration, statistics
     print(statistics.average_time / statistics.leaving_count)
 
 
-def arrival_demand(times: Clock, system: Configuration) -> None:
+def arrival_demand(times: Clock,
+                   system: Configuration) -> None:
     print("I. Arrival demand", times.current, end="\t###\t")
     demand = Demand(times.arrival)
     print("demand ID:", demand.id)
@@ -40,7 +44,8 @@ def arrival_demand(times: Clock, system: Configuration) -> None:
     times.update_arrival_time(system.lambd)
 
 
-def service_demand(times: Clock, system: Configuration) -> None:
+def service_demand(times: Clock,
+                   system: Configuration) -> None:
     print("II. Start service demand", times.current, end="\t###\t")
     times.leaving = times.current + expovariate(system.mu)
     system.device.to_occupy(system.queue.get())
@@ -49,7 +54,9 @@ def service_demand(times: Clock, system: Configuration) -> None:
     times.service_start = float('inf')
 
 
-def leaving_demand(times: Clock, system: Configuration, statistics: Statistics) -> None:
+def leaving_demand(times: Clock,
+                   system: Configuration,
+                   statistics: Statistics) -> None:
     print("III. Leaving demand", times.current, end="\t###\t")
     demand = system.device.get_demand()
     print("demand ID:", demand.id)
